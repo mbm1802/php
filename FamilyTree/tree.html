@@ -1,0 +1,63 @@
+<html>
+<LINK href="style.css" rel="stylesheet" type="text/css">
+<LINK href="custom.css" rel="stylesheet" type="text/css">
+<div id="links" class="hypLinks"><a href="index.php">Home</a>&nbsp;&nbsp;<a href="add_member.php">Add New Member</a></div>
+<div>
+<div id="mainContainer" class="clearfix"></div>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+
+<script>
+
+var xmlhttp = new XMLHttpRequest();
+var url = "data.php";
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        myFunction(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+//var testImgSrc = "http://0.gravatar.com/avatar/06005cd2700c136d09e71838645d36ff?s=69&d=wavatar";
+var testImgSrc = "./images/FamilyTree.jpg";
+
+
+function myFunction( parentId ){
+var members = JSON.parse(parentId);	
+    var i;
+	//alert(members);
+    // This is slow and iterates over each object everytime.
+    // Removing each item from the array before re-iterating 
+    // may be faster for large datasets.
+
+    for(var i = 0; i < members.length; i++){
+        var member = members[i];
+        if(member.parentId === members[i].parentId){		
+            var parent = members[i].parentId ? $("#containerFor" + members[i].parentId) : $("#mainContainer"),
+				memberId = member.memberId,
+				metaInfo = "<img src='"+testImgSrc+"'/>" + members[i].first_name + " " + members[i].last_name + "<br>";
+            parent.append("<div class='container' id='containerFor" + memberId + "'><div class='member'><a href='update.php?m_id="+members[i].memberId+"'>" + members[i].first_name + " " + members[i].last_name + "</a><div class='metaInfo'>" + metaInfo + "</div></div></div>");
+            myFunction(memberId);
+        } 
+    }
+ }( null );
+
+
+/* var pretty = function(){
+    var self = $(this),
+        children = self.children(".container"),
+        // subtract 4% for margin/padding/borders.
+        width = (100/children.length) - 20;
+		
+    children
+        .css("width", width + "%")
+        .each(pretty);
+    
+};*/
+$("#mainContainer").each(pretty);
+</script>
+</body>
+</html>
+

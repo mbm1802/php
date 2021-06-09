@@ -1,0 +1,19 @@
+<?php
+define("tb_member","member");
+	define("cl_member_id","member_id");
+	define("cl_parent_id","parent_id");
+	define("cl_first_name","first_name");
+	define("cl_last_name","last_name");
+	define("cl_gender","gender");
+	define("cl_dob","dob");
+	define("cl_dod","dod");
+	define("cl_phone","phone");
+	define("cl_email","email");
+	define("cl_spouse_name","spouse_name");
+	define("cl_spouse_dob","spouse_dob");
+	define("cl_spouse_dod","spouse_dod");
+	define("cl_spouse_phone","spouse_phone");
+	define("cl_spouse_email","spouse_email");
+	define("cl_marriage_date","marriage_date");
+	define("cl_member_img","member_img");
+?>
