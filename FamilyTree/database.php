@@ -52,11 +52,21 @@ class database extends Constants
 		return $dbResult;	
 	}
 
+	// Get ParentID
+	public function getParent($memberID,$string="")
+	{
+		$sql = "SELECT `".cl_parent_id."` FROM ".tb_member." WHERE member_id=$memberID;";
+		// echo $sql";
+		$dbResult = $this->executeQuery($sql,$string);
+		return $dbResult;	
+	}
+
 	// delete member
 	public function deleteMember($memberID,$string="")
 	{
 		$sql = "SELECT `".cl_member_id."` FROM `".tb_member."` WHERE `".cl_parent_id."`=$memberID;";
-		echo $sql;
+		// echo $sql;
+		
 		$rs_child = $this->executeQuery($sql,"checkForChildrenBeforeDelete");
 		if(!$rs_child)
 			die("$string : ".mysqli_error($this->linkDB));
@@ -64,13 +74,21 @@ class database extends Constants
 		{
 			$childCount=mysqli_num_rows($rs_child);
 			if($childCount > 0)
-				echo "Child count is ".$childCount.". Proceed to delete this member and children?";
+			{
+				//echo "Child count is ".$childCount.". Unable to delete";
+				return false;
+			}
 			else {
-				echo "Proceed to delete?";
+				// echo "Proceed to delete?";
+				$sqlDel="DELETE FROM `".tb_member."` WHERE `".cl_member_id."`=".$memberID.";";
+				// echo $sqlDel;
+				if($this->executeQuery($sqlDel,$string))
+					return true;
+				else 
+					return false;
 			}
 			exit;
 			//return $dbResult;
-			$sqlDel="DELETE FROM `".tb_member."` WHERE `".cl_member_id."`=".$_POST['memberId'].";";
 		}
 	}
 }

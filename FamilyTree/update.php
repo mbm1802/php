@@ -35,10 +35,10 @@ function delete_box(val,page,id)
 </script>
 <?php
 
-if(!session_start())
-{
-	session_start();
-}
+// if(!session_start())
+// {
+// 	session_start();
+// }
 // error_reporting(0);
 include_once("database.php");
 
@@ -121,8 +121,11 @@ if($_SERVER['REQUEST_METHOD']=="POST")
 	}
 	else if (isset($_POST['btnDelete']))
 	{
-		//$result = $dbObj->deleteMember($member_ID,"deletemember");
-		
+		$result = $dbObj->deleteMember($member_ID,"deletemember");
+		if($result==true)
+			header("location:index.php");
+		else
+			header("location:update.php?m_id=".$member_ID."&msg=Unable to delete. Check if children exist or SQL error.");
 		// exit;
 	}
 }
@@ -148,11 +151,8 @@ function submenu_v($member_id,$dbObj)
 	$rs_chldrnList = $dbObj->getChildList($member_id,"getChildren");
 	global $ParentofCurrentlySelected;
 	$ParentofCurrentlySelected=0;
-	$member_ID=$_GET['m_id'];
-	$sqlUpdSel1 = "SELECT `".cl_parent_id."` FROM ".tb_member." WHERE member_id=$member_ID;";
-	// echo $sqlUpdSel1;
-	$rs_sqlUpdSel1 = $dbObj->executeQuery($sqlUpdSel1,"upd-rsup1");
-	$row_upd1 = mysqli_fetch_array($rs_sqlUpdSel1);
+	$rs_Parent = $dbObj->getParent($_GET['m_id'],"upd-getParent");
+	$row_Parent = mysqli_fetch_array($rs_Parent);
 
 	// Loop the children for a member and print the same. For each element do recursive search for children.
 	if(mysqli_num_rows($rs_chldrnList)>0)
@@ -160,15 +160,15 @@ function submenu_v($member_id,$dbObj)
 		?><ul><?php
 		while($row_2=mysqli_fetch_array($rs_chldrnList))
 		{
-			if($row_2[cl_member_id] == $row_upd1[cl_parent_id])
+			if($row_2[cl_member_id] == $row_Parent[cl_parent_id])
 			{
 				$ParentofCurrentlySelected=1;
 			}
 			?>			
 				<li>               	
 					<a>
-						<input type="radio" name="parent_id" id="parent_id"  value="<?php echo $row_2[cl_member_id];?>" style="float:left" <?php if(($ParentofCurrentlySelected == 1)) echo "checked";?> />
-							<?php echo $row_2[cl_first_name]." & ".$row_2[cl_spouse_name];?></a>
+						<input type="radio" name="parent_id" id="parent_id"  value="<?php echo $row_2[cl_member_id];?>" style="float:left" <?php echo ($ParentofCurrentlySelected == 1)? "checked": "";?> />
+							<?php echo $row_2[cl_first_name]; echo (($row_2[cl_spouse_name]!=NULL)? " & ".$row_2[cl_spouse_name]:"");?></a>
 					<?php
 					if(submenu_v($row_2[cl_member_id],$dbObj)=="")
 					{
@@ -184,12 +184,14 @@ function submenu_v($member_id,$dbObj)
 <ul>
 <?php
 // Printing the top member (PARENT_ID=NULL) and loop through each child
+$rs_Parent = $dbObj->getParent($_GET['m_id'],"upd-checkIfParent");
+$row_Parent = mysqli_fetch_array($rs_Parent);
 while($row_v = mysqli_fetch_array($items_v))
 {
 	?>
     	<li>
-        	<a><input type="radio" name="parent_id" id="parent_id" value="<?php echo $row_v[cl_member_id];?>" style="float:left" />
-					<?php echo $row_v[cl_first_name]." & ".$row_v[cl_spouse_name];?>
+        	<a><input type="radio" name="parent_id" id="parent_id" value="<?php echo $row_v[cl_member_id];?>" style="float:left" <?php echo ($row_v[cl_member_id]==$row_Parent[cl_parent_id])? "checked":""  ?> />
+					<?php echo $row_v[cl_first_name]; echo (($row_v[cl_spouse_name]!=NULL)? " & ".$row_v[cl_spouse_name]:"");?>
 				</a>
 		<?php
         if(submenu_v($row_v[cl_member_id],$dbObj)=="")
@@ -199,16 +201,16 @@ while($row_v = mysqli_fetch_array($items_v))
 }
 ?>
 </ul>
-</div>	</td>
+</div></td>
    </tr>
     <tr>
 		<td><strong>Parent id :</strong></td>
 		<td><input type="text" name="parent_id" id="parent_id"value="<?php echo $parent_id; ?>" readonly /></td>
 	</tr>
-	<tr>
+	<!-- <tr>
 		<td><strong>Member id :</strong></td>
 		<td><input type="text" name="member_id" id="member_id" value="<?php echo $member_id; ?>" readonly /></td>	
-	</tr>
+	</tr> -->
 	<tr>
 		<td><strong>First Name :</strong></td>
 		<td><input type="text" name="first_name" id="first_name" value="<?php echo $first_name; ?>" /></td>	
@@ -272,7 +274,7 @@ while($row_v = mysqli_fetch_array($items_v))
    </tr>
    <tr>
    		<td><input type="submit" name="btnSubmit" value="Modify" class="btnPost" /></td>
-        <td><input type="button" name="btnDelete" value="Delete" class="btnPost" onclick ="javascript:delete_box('Delete','update.php');" />
+        <td><input type="submit" name="btnDelete" value="Delete" class="btnPost" onclick ="javascript:delete_box('Delete','update.php');" />
 				<input type="hidden" id="memberId" name="memberId" value="<?php echo $member_ID?>"/></td>
    </tr>
 </table>
