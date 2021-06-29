@@ -64,6 +64,7 @@ if(mysqli_num_rows($rs_sqlUpdSel) == 1)
 	$mPhone				= $row_upd[cl_phone];
 	$mEmail				= $row_upd[cl_email];
 	$spouse_name	= $row_upd[cl_spouse_name];
+	$spouse_lastname	= $row_upd[cl_spouse_lastname];
 	$sPhone				= $row_upd[cl_spouse_phone];
 	$sEmail				= $row_upd[cl_spouse_email];
 	(strtotime($row_upd[cl_dob]) != 0) ? $mDOB=date("Y-m-d", strtotime($row_upd[cl_dob])) : $mDOB=NULL;
@@ -80,16 +81,17 @@ if($_SERVER['REQUEST_METHOD']=="POST")
 	if (isset($_POST['btnSubmit']))
 	{
 			//echo "<pre>";	print_r($_POST);	echo "</pre>"; 
-			$member_id			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['member_id']));
-			$parent_id 			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['parent_id'])); 
-			$first_name 		= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['first_name']));	
-			$last_name 			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['last_name']));
-			$gender 				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['gender']));
-			$mPhone 				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mPhone']));
-			$mEmail 				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mEmail']));
-			$spouse_name 		= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['spouse_name']));
-			$sPhone 				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sPhone']));
-			$sEmail 				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sEmail']));
+			$member_id				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['memberId']));
+			$parent_id 				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['parent_id'])); 
+			$first_name 			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['first_name']));	
+			$last_name 				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['last_name']));
+			$gender 					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['gender']));
+			$mPhone 					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mPhone']));
+			$mEmail 					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mEmail']));
+			$spouse_name 			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['spouse_name']));
+			$spouse_lastname	= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['spouse_lastname']));
+			$sPhone 					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sPhone']));
+			$sEmail 					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sEmail']));
 			(strtotime($_POST['mDOB']) != 0) ? $mDOB = date("Y-m-d", strtotime($_POST['mDOB'])): $mDOB=NULL;
 			(strtotime($_POST['mDOD']) != 0) ? $mDOD = date("Y-m-d", strtotime($_POST['mDOD'])): $mDOD=NULL;
 			(strtotime($_POST['sDOB']) != 0) ? $sDOB = date("Y-m-d", strtotime($_POST['sDOB'])): $sDOB=NULL;
@@ -102,22 +104,22 @@ if($_SERVER['REQUEST_METHOD']=="POST")
 			(strtotime($_POST['mDOB']) == 0) ? $upd_sql_date=",".cl_dob."=NULL" : $upd_sql_date=",".cl_dob."='".$mDOB."'";
 			(strtotime($_POST['mDOD']) == 0) ? $upd_sql_date=$upd_sql_date.",".cl_dod."=NULL" : $upd_sql_date=$upd_sql_date.",".cl_dod."='".$mDOD."'";
 			(strtotime($_POST['sDOB']) == 0) ? $upd_sql_date=$upd_sql_date.",".cl_spouse_dob."=NULL" : $upd_sql_date=$upd_sql_date.",".cl_spouse_dob."='".$sDOB."'";
-			(strtotime($_POST['sDOD']) == 0) ? $upd_sql_date=$upd_sql_date.",".cl_spouse_dod."=NULL" : $upd_sql_date=$upd_sql_date.",".cl_spouse_dod."='".$sDOB."'";
+			(strtotime($_POST['sDOD']) == 0) ? $upd_sql_date=$upd_sql_date.",".cl_spouse_dod."=NULL" : $upd_sql_date=$upd_sql_date.",".cl_spouse_dod."='".$sDOD."'";
 			(strtotime($_POST['marriageDate']) == 0) ? $upd_sql_date=$upd_sql_date.",".cl_marriage_date."=NULL" : $upd_sql_date=$upd_sql_date.",".cl_marriage_date."='".$marriageDate."'";
 			$where_clause=" WHERE ".cl_member_id."=".$member_id.";";
 
 			if ($parent_id > 0)
 				{
-					$sql_upd = "UPDATE `".tb_member."` SET `".cl_parent_id."`=".$parent_id.",`".cl_first_name."`='".$first_name."',`".cl_last_name."`='".$last_name."',`".cl_gender."`='".$gender."',`".cl_spouse_name."`='".$spouse_name."',`".cl_member_img."`='".$member_img."',`".cl_phone."`='".$mPhone."',`".cl_email."`='".$mEmail."',`".cl_spouse_phone."`='".$sPhone."',`".cl_spouse_email."`='".$sEmail."'";
+					$sql_upd = "UPDATE `".tb_member."` SET `".cl_parent_id."`=".$parent_id.",`".cl_first_name."`='".$first_name."',`".cl_last_name."`='".$last_name."',`".cl_gender."`='".$gender."',`".cl_spouse_name."`='".$spouse_name."',`".cl_spouse_lastname."`='".$spouse_lastname."',`".cl_member_img."`='".$member_img."',`".cl_phone."`='".$mPhone."',`".cl_email."`='".$mEmail."',`".cl_spouse_phone."`='".$sPhone."',`".cl_spouse_email."`='".$sEmail."'";
 				}
 				else
 				{
-					$sql_upd = "UPDATE `".tb_member."` SET `".cl_first_name."`='".$first_name."',`".cl_last_name."`='".$last_name."',`".cl_gender."`='".$gender."',`".cl_spouse_name."`='".$spouse_name."',`".cl_member_img."`='".$member_img."',`".cl_phone."`='".$mPhone."',`".cl_email."`='".$mEmail."',`".cl_spouse_phone."`='".$sPhone."',`".cl_spouse_email."`='".$sEmail."'";
+					$sql_upd = "UPDATE `".tb_member."` SET `".cl_first_name."`='".$first_name."',`".cl_last_name."`='".$last_name."',`".cl_gender."`='".$gender."',`".cl_spouse_name."`='".$spouse_name."',`".cl_spouse_lastname."`='".$spouse_lastname."',`".cl_member_img."`='".$member_img."',`".cl_phone."`='".$mPhone."',`".cl_email."`='".$mEmail."',`".cl_spouse_phone."`='".$sPhone."',`".cl_spouse_email."`='".$sEmail."'";
 				}
 				$sql_upd=$sql_upd.$upd_sql_date.$where_clause;
-				//echo $sql_upd;
+				// echo $sql_upd;exit;
 				$dbObj->executeQuery($sql_upd,"upd-mem");
-				header("location:update.php?msg=update&m_id=".$_POST['member_id']."&msg=Details updated");
+				header("location:update.php?msg=update&m_id=".$_POST['memberId']."&msg=Details updated");
 	}
 	else if (isset($_POST['btnDelete']))
 	{
@@ -139,7 +141,7 @@ $items_v = $dbObj->getMmberInfo($member_ID,true,"getTopNode");
 
 <div class="messages"><?php echo $messages;?></div>
 <form method="post" name="form1">
-<table width="30%" style="border:1px solid #09F;border-radius:10px;padding:10px;font-family: Arial, Helvetica, sans-serif;font-size: 12px;">
+<table width="30%" class="tableCustom">
 	<tr>
     	<td width="50%" valign="top"><strong>Parent :</strong></td>
         <td>
@@ -251,6 +253,10 @@ while($row_v = mysqli_fetch_array($items_v))
    <tr>
    	<td><strong>Spouse's Name :</strong></td>
     <td><input type="text" name="spouse_name" id="spouse_name" value="<?php echo $spouse_name; ?>" /></td>
+   </tr>
+	 <tr>
+   	<td><strong>Spouse's Last Name :</strong></td>
+    <td><input type="text" name="spouse_lastname" id="spouse_lastname" value="<?php echo $spouse_lastname; ?>" /></td>
    </tr>
    <tr>
    	<td><strong>Spouse's Phone :</strong></td>

@@ -86,7 +86,7 @@ function submenu_h($member_id,$dbObj)
 } */
 ?>
 <div id="links" class="hypLinks"><a href="tree.html">Family Tree</a>&nbsp;&nbsp;<a href="add_member.php">Add New Member</a><br /></div>
-<h2>Family Tree</h2>
+<h2 style="padding-top: 2px; padding-bottom:2px">Family Tree</h2>
 
 <div id="smoothmenu1" class="ddsmoothmenu">
 <ul>

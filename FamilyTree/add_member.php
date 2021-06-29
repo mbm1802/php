@@ -37,16 +37,17 @@ if(($isError==0) && isset($_SESSION['isError']) && $_SESSION['isError']==1)
 	$_SESSION['isError']=0;
 if($_SERVER['REQUEST_METHOD']=="POST")
 {
-	$parentid		= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['parentid']));
-	$firstname		= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['firstname']));
-	$lastname		= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['lastname']));
-	$gender				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['gender']));
-	$mPhone				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mPhone']));
-	$mEmail				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mEmail']));
-	$spousename	= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['spousename']));
-	$sPhone				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sPhone']));
-	$sEmail				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sEmail']));
-	$member_img		= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['member_img']));
+	$parentid				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['parentid']));
+	$firstname			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['firstname']));
+	$lastname				= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['lastname']));
+	$gender					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['gender']));
+	$mPhone					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mPhone']));
+	$mEmail					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['mEmail']));
+	$spousename			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['spousename']));
+	$spouselastname	= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['spouselastname']));
+	$sPhone					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sPhone']));
+	$sEmail					= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['sEmail']));
+	$member_img			= addslashes( mysqli_real_escape_string($dbObj->linkDB,$_POST['member_img']));
 	(strtotime($_POST['mDOB']) != 0) ? $mDOB = date("Y-m-d", strtotime($_POST['mDOB'])): $mDOB=NULL;
 	(strtotime($_POST['mDOD']) != 0) ? $mDOD = date("Y-m-d", strtotime($_POST['mDOD'])): $mDOD=NULL;
 	(strtotime($_POST['sDOB']) != 0) ? $sDOB = date("Y-m-d", strtotime($_POST['sDOB'])): $sDOB=NULL;
@@ -59,6 +60,7 @@ if($_SERVER['REQUEST_METHOD']=="POST")
 	$_SESSION['mPhone']=$mPhone;
 	$_SESSION['mEmail']=$mEmail;
 	$_SESSION['spousename']=$spousename;
+	$_SESSION['spouselastname']=$spouselastname;
 	$_SESSION['sPhone']=$sPhone;
 	$_SESSION['sEmail']=$sEmail;
 	$_SESSION['mDOB']=$mDOB;
@@ -74,8 +76,8 @@ if($_SERVER['REQUEST_METHOD']=="POST")
 	}
 	else
 	{
-		$sqlIns = "INSERT INTO  ".tb_member." (`".cl_parent_id."`,`".cl_first_name."`,`".cl_last_name."`,`".cl_gender."`,`".cl_phone."`,`".cl_email."`,`".cl_spouse_name."`,`".cl_spouse_phone."`,`".cl_spouse_email."`,`".cl_member_img."`,`".cl_dob."`,`".cl_dod."`,`".cl_spouse_dob."`,`".cl_spouse_dod."`,`".cl_marriage_date."`) VALUES (".$parentid.",'".$firstname."','".$lastname."','".$gender."','".$mPhone."','".$mEmail."','".$spousename."','".$sPhone."','".$sEmail."','".$member_img."'";
-		// $sqlIns = "INSERT INTO  ".tb_member." VALUES (,'".$parentid."','".$firstname."','".$lastname."','".$gender."','".$mPhone."','".$mEmail."','".$spousename."','".$sPhone."','".$sEmail."','".$member_img."'";
+		$sqlIns = "INSERT INTO  ".tb_member." (`".cl_parent_id."`,`".cl_first_name."`,`".cl_last_name."`,`".cl_gender."`,`".cl_phone."`,`".cl_email."`,`".cl_spouse_name."`,`".cl_spouse_lastname."`,`".cl_spouse_phone."`,`".cl_spouse_email."`,`".cl_member_img."`,`".cl_dob."`,`".cl_dod."`,`".cl_spouse_dob."`,`".cl_spouse_dod."`,`".cl_marriage_date."`) VALUES (".$parentid.",'".$firstname."','".$lastname."','".$gender."','".$mPhone."','".$mEmail."','".$spousename."','".$spouselastname."','".$sPhone."','".$sEmail."','".$member_img."'";
+		// $sqlIns = "INSERT INTO  ".tb_member." VALUES (,'".$parentid."','".$firstname."','".$lastname."','".$gender."','".$mPhone."','".$mEmail."','".$spousename."','".$spouselastname."','".$sPhone."','".$sEmail."','".$member_img."'";
 		$date_clause="";
 		(strtotime($_SESSION['mDOB']) == 0) ? $date_clause=",NULL" : $date_clause=",'".$mDOB."'";
 		(strtotime($_SESSION['mDOD']) == 0) ? $date_clause=$date_clause.",NULL" : $date_clause=$date_clause.",'".$mDOD."'";
@@ -100,8 +102,8 @@ $items_v = $dbObj->executeQuery($sql,"addm-sel");
 </br>
 <div class="messages"><?php echo $messages; ?></div>
 <form method="post">
-<table width="30%" style="border:1px solid #09F;border-radius:10px;padding:10px;font-family: Arial, Helvetica, sans-serif;font-size: 12px;">
-<!-- <table width="30%" class="tableCustom"> -->
+<!-- <table width="30%" style="border:1px solid #09F;border-radius:10px;padding:10px;font-family: Arial, Helvetica, sans-serif;font-size: 12px;"> -->
+<table width="30%" class="tableCustom">
 	<tr>
     	<Td width="50%" valign="top"><strong>Parent* </strong></Td>
         <td>
@@ -188,15 +190,19 @@ while($row_v = mysqli_fetch_array($items_v))
     <td><input type="date" name="marriageDate" id="marriageDate" value="<?php echo (isset($_SESSION['isError']) && $_SESSION['isError']==1)? $_SESSION['marriageDate']:NULL;?>" /></td>
    </tr>
    <tr>
-     <td><strong>Spouse Name </strong></td>
+     <td><strong>Spouse's Name </strong></td>
      <td><input type="text" name="spousename" id="spousename" value="<?php echo (isset($_SESSION['isError']) && $_SESSION['isError']==1)? $_SESSION['spousename']:""; ?>"/></td>
+   </tr>
+	 <tr>
+     <td><strong>Spouse's Last Name </strong></td>
+     <td><input type="text" name="spouselastname" id="spouselastname" value="<?php echo (isset($_SESSION['isError']) && $_SESSION['isError']==1)? $_SESSION['spouselastname']:""; ?>"/></td>
    </tr>
 	 <tr>
    	<td><strong>Spouse's Phone </strong></td>
     <td><input type="text" name="sPhone" id="sPhone" value="<?php echo (isset($_SESSION['isError']) && $_SESSION['isError']==1)? $_SESSION['sPhone']:""; ?>"?/></td>
    </tr>
    <tr>
-   	<td><strong>Spouse Email </strong></td>
+   	<td><strong>Spouse's Email </strong></td>
     <td><input type="text" name="sEmail" id="sEmail" value="<?php echo (isset($_SESSION['isError']) && $_SESSION['isError']==1)? $_SESSION['sEmail']:""; ?>" /></td>
    </tr>
    <tr>

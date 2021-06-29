@@ -10,6 +10,7 @@ define("tb_member","member");
 	define("cl_phone","phone");
 	define("cl_email","email");
 	define("cl_spouse_name","spouse_name");
+	define("cl_spouse_lastname","spouse_lastname");
 	define("cl_spouse_dob","spouse_dob");
 	define("cl_spouse_dod","spouse_dod");
 	define("cl_spouse_phone","spouse_phone");
